@@ -1,0 +1,23 @@
+import { CLIENTS_MOCKS } from '@/domain/constants/mocks';
+import { listClientsResponseSchema, type ListClientsParams } from '@/domain/schemas/client';
+
+export class ClientRepository {
+  public static async listClients(params: ListClientsParams) {
+    const response = await paginatedAPI(params);
+
+    const parsedDate = listClientsResponseSchema.parse(response);
+
+    return parsedDate;
+  }
+}
+
+const paginatedAPI = async (params: ListClientsParams) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const startIndex = (params.page - 1) * params.pageSize;
+  const endIndex = startIndex + params.pageSize;
+
+  return {
+    data: CLIENTS_MOCKS.slice(startIndex, endIndex),
+  };
+};
