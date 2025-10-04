@@ -8,6 +8,11 @@ export const clientSchema = z.object({
 
 export const listClientsResponseSchema = z.object({
   data: z.array(clientSchema),
+  pagination: z.object({
+    page: z.number(),
+    pageSize: z.number(),
+    total: z.number(),
+  }),
 });
 
 export const listClientsSchema = z.object({
@@ -17,3 +22,4 @@ export const listClientsSchema = z.object({
 
 export type Client = z.infer<typeof clientSchema>;
 export type ListClientsParams = z.infer<typeof listClientsSchema>;
+export type ListClientsResponse = z.infer<typeof listClientsResponseSchema>;

@@ -12,12 +12,17 @@ export class ClientRepository {
 }
 
 const paginatedAPI = async (params: ListClientsParams) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 300));
 
   const startIndex = (params.page - 1) * params.pageSize;
   const endIndex = startIndex + params.pageSize;
 
   return {
     data: CLIENTS_MOCKS.slice(startIndex, endIndex),
+    pagination: {
+      page: params.page,
+      pageSize: params.pageSize,
+      total: CLIENTS_MOCKS.length,
+    },
   };
 };

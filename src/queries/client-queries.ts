@@ -1,6 +1,5 @@
 import { Client } from '@/domain/entities/client';
-import type { ListClientsParams } from '@/domain/schemas/client';
-import type { RawClient } from '@/domain/types/raw-client';
+import type { ListClientsParams, ListClientsResponse } from '@/domain/schemas/client';
 import { ClientRepository } from '@/repositories/client';
 import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
@@ -9,28 +8,36 @@ import type { AxiosError } from 'axios';
 type QueryResult = {
   list: Client[];
   map: Map<string, Client>;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+  };
 };
 
 type ListClientsProps = {
   params: ListClientsParams;
-  options?: Omit<UseQueryOptions<RawClient[], AxiosError, QueryResult>, 'queryKey' | 'queryFn'>;
+  options?: Omit<
+    UseQueryOptions<ListClientsResponse, AxiosError, QueryResult>,
+    'queryKey' | 'queryFn'
+  >;
 };
 
 function useListClients({ params, options }: ListClientsProps) {
   const queryKey = ['clients', params];
 
-  const query = useQuery<RawClient[], AxiosError, QueryResult>({
+  const query = useQuery<ListClientsResponse, AxiosError, QueryResult>({
     queryKey,
     queryFn: async () => {
-      const { data } = await ClientRepository.listClients(params);
+      const response = await ClientRepository.listClients(params);
 
-      return data;
+      return response;
     },
     select: (data) => {
-      const list = data.map((client) => new Client(client));
+      const list = data.data.map((client) => new Client(client));
       const map = new Map(list.map((client) => [client.id, client]));
 
-      return { list, map };
+      return { list, map, pagination: data.pagination };
     },
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes

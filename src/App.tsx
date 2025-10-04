@@ -9,7 +9,9 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Table />
+      <main className='h-screen flex flex-col'>
+        <Table />
+      </main>
     </QueryClientProvider>
   );
 }
