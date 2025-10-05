@@ -1,73 +1,86 @@
-# React + TypeScript + Vite
+# React AG Grid with TanStack Query
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A demonstration project showcasing AG Grid tables integrated with TanStack Query following a clean, structured architecture pattern.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** - UI library with latest features
+- **TypeScript** - Type safety and developer experience
+- **Vite** - Fast build tool and development server
+- **AG Grid Community** - Powerful data grid component
+- **TanStack Query** - Server state management and caching
+- **Tailwind CSS** - Utility-first CSS framework
+- **Zod** - Runtime type validation and schema definition
+- **Axios** - HTTP client for API requests
 
-## React Compiler
+## Architecture
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+This project follows a layered architecture pattern with clear separation of concerns:
 
-## Expanding the ESLint configuration
+### Domain Layer (`src/domain/`)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Entities** - Business objects with behavior (e.g., `Client` class)
+- **Schemas** - Zod schemas for type validation and API contracts
+- **Constants** - Application constants and configuration
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Data Layer (`src/repositories/`)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Repositories** - Data access abstraction layer
+- Handles API communication and data transformation
+- Provides clean interface between domain and external services
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Application Layer (`src/queries/` & `src/mutations/`)
+
+- **Queries** - TanStack Query hooks for data fetching
+- **Mutations** - TanStack Query hooks for data modification
+- Implements caching, optimistic updates, and error handling
+
+### Presentation Layer (`src/containers/` & `src/components/`)
+
+- **Containers** - Smart components that handle business logic
+- **Components** - Reusable UI components
+- **Table Columns** - AG Grid column definitions and cell renderers
+
+## Key Features
+
+- **Inline Editing** - Cell editing with optimistic updates
+- **Type Safety** - End-to-end type safety from API to UI
+- **Caching Strategy** - Intelligent data caching with TanStack Query
+- **Clean Architecture** - Separation of concerns with clear boundaries
+- **Custom Pagination** - Tailored pagination component with page size options
+
+## Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+├── containers/          # Smart components and business logic
+│   └── table/          # Table-specific components
+├── domain/             # Business logic and domain models
+│   ├── entities/       # Domain entities with behavior
+│   ├── schemas/        # Zod validation schemas
+│   └── constants/      # Application constants
+├── queries/            # TanStack Query data fetching hooks
+├── mutations/          # TanStack Query mutation hooks
+├── repositories/       # Data access layer
+└── lib/               # Utility functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Install dependencies:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   ```bash
+   pnpm install
+   ```
+
+2. Start development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+3. Build for production:
+   ```bash
+   pnpm build
+   ```
