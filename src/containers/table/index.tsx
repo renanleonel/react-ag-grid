@@ -1,11 +1,12 @@
 import { useTableColumns } from '@/containers/table/columns/use-table-columns';
-import type { Client, ListClientsParams } from '@/domain/schemas/client';
+import type { ListClientsParams } from '@/domain/schemas/client';
 import { useListClients } from '@/queries/client-queries';
 import { AgGridReact } from 'ag-grid-react';
 import { useState } from 'react';
 
 import { CustomPagination } from '@/components/custom-pagination';
-import { Skeleton } from '@/components/ui/skeleton';
+import type { Client } from '@/domain/entities/client';
+import { useUpdateClient } from '@/mutations/client-mutations';
 
 const DEFAULT_PARAMS: ListClientsParams = {
   page: 1,
@@ -23,13 +24,33 @@ export function Table() {
 
   const clients = query.data?.list ?? [];
 
-  if (query.isLoading) {
-    return <Skeleton className='h-10 w-full' />;
-  }
+  const { updateClient } = useUpdateClient();
 
   return (
     <div className='h-full w-full p-10 flex flex-col gap-4'>
-      <AgGridReact<Client> rowData={clients} columnDefs={columnDefs} />
+      <AgGridReact<Client>
+        rowData={clients}
+        columnDefs={columnDefs}
+        onCellValueChanged={({ data, newValue, colDef }) => {
+          const newClient = data.clone();
+
+          const fieldSetters: Record<string, (client: Client, value: string) => void> = {
+            name: (client, value) => {
+              client.name = value;
+            },
+            country: (client, value) => {
+              client.country = value;
+            },
+          };
+
+          if (colDef.field && fieldSetters[colDef.field]) {
+            fieldSetters[colDef.field](newClient, newValue);
+          }
+
+          console.log('Updated client:', newClient);
+          updateClient(newClient);
+        }}
+      />
 
       <div className='h-10'>
         <CustomPagination

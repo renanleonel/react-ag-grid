@@ -1,4 +1,4 @@
-import type { Client } from '@/domain/schemas/client';
+import type { Client } from '@/domain/entities/client';
 import type { ColDef } from 'ag-grid-community';
 
 export const NameColumn = (): ColDef<Client> => ({
@@ -6,5 +6,6 @@ export const NameColumn = (): ColDef<Client> => ({
   minWidth: 100,
   field: 'name',
   headerName: 'Name',
+  editable: true,
   cellRenderer: ({ data }: { data: Client }) => data.name,
 });

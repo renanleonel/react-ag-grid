@@ -1,4 +1,4 @@
-import type { RawClient } from '@/domain/types/raw-client';
+import type { RawClient } from '@/domain/schemas/client';
 
 export const CLIENTS_MOCKS: RawClient[] = Array.from({ length: 200 }, (_, index) => ({
   id: (index + 1).toString(),

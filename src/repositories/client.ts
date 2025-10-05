@@ -1,4 +1,5 @@
 import { CLIENTS_MOCKS } from '@/domain/constants/mocks';
+import type { Client } from '@/domain/entities/client';
 import { listClientsResponseSchema, type ListClientsParams } from '@/domain/schemas/client';
 
 export class ClientRepository {
@@ -8,6 +9,12 @@ export class ClientRepository {
     const parsedDate = listClientsResponseSchema.parse(response);
 
     return parsedDate;
+  }
+
+  public static async updateClient(client: Client) {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    return client;
   }
 }
 

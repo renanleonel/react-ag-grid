@@ -1,4 +1,4 @@
-import type { Client } from '@/domain/schemas/client';
+import type { Client } from '@/domain/entities/client';
 import type { ColDef } from 'ag-grid-community';
 
 export const CountryColumn = (): ColDef<Client> => ({

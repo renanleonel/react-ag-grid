@@ -5,7 +5,7 @@ import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-type QueryResult = {
+export type ListClientsQueryResult = {
   list: Client[];
   map: Map<string, Client>;
   pagination: {
@@ -18,7 +18,7 @@ type QueryResult = {
 type ListClientsProps = {
   params: ListClientsParams;
   options?: Omit<
-    UseQueryOptions<ListClientsResponse, AxiosError, QueryResult>,
+    UseQueryOptions<ListClientsResponse, AxiosError, ListClientsQueryResult>,
     'queryKey' | 'queryFn'
   >;
 };
@@ -26,7 +26,7 @@ type ListClientsProps = {
 function useListClients({ params, options }: ListClientsProps) {
   const queryKey = ['clients', params];
 
-  const query = useQuery<ListClientsResponse, AxiosError, QueryResult>({
+  const query = useQuery<ListClientsResponse, AxiosError, ListClientsQueryResult>({
     queryKey,
     queryFn: async () => {
       const response = await ClientRepository.listClients(params);

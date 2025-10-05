@@ -20,6 +20,6 @@ export const listClientsSchema = z.object({
   pageSize: z.number(),
 });
 
-export type Client = z.infer<typeof clientSchema>;
+export type RawClient = z.infer<typeof clientSchema>;
 export type ListClientsParams = z.infer<typeof listClientsSchema>;
 export type ListClientsResponse = z.infer<typeof listClientsResponseSchema>;
